@@ -2,11 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const URL = "mongodb+srv://sikar:nopassword@cluster0.awut9.mongodb.net/Sikar?retryWrites=true&w=majority";
 const bodyparser = require("body-parser");
+require('./models/User');
+const User = mongoose.model('users');
+
 
 const parameters = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
+
+
 
 mongoose.connect(URL,parameters)
 .then(()=>{
@@ -20,10 +25,11 @@ const app =express();
 const port=4000;
 
 app.use(bodyparser.json());
+app.use(express.urlencoded({ extended: true })); 
 
 
 app.get("/", (req,res)=>{
-    res.send("App yhi bnega!");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.listen(port, ()=>{
@@ -31,7 +37,7 @@ app.listen(port, ()=>{
 });
 
 app.post("/adduser", (req,res)=>{
-    var userdata = new users(req.body);
+    var userdata = new User(req.body);
     userdata.save()
     .then(item =>{
         res.send("item saved to database");
