@@ -1,17 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const URL = "mongodb+srv://sikar:nopassword@cluster0.awut9.mongodb.net/Sikar?retryWrites=true&w=majority";
+const URL = "mongodb+srv://test:test@cluster0.awut9.mongodb.net/RoomRentSikar?retryWrites=true&w=majority";
 const bodyparser = require("body-parser");
+
+//Setting Up Models
 require('./models/User');
-const User = mongoose.model('users');
 
 
 const parameters = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
-
-
 
 mongoose.connect(URL,parameters)
 .then(()=>{
@@ -37,7 +36,11 @@ app.listen(port, ()=>{
 });
 
 app.post("/adduser", (req,res)=>{
+    //Fetch User Model
+    const User = mongoose.model('Property');
+
     var userdata = new User(req.body);
+
     userdata.save()
     .then(item =>{
         res.send("item saved to database");

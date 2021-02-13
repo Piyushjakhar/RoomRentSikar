@@ -6,8 +6,8 @@ const userSchema = new Schema({
     type: String,
     address: String,
     ammenties: String,
-    contact: Number,
+    contact: String,
     price: Number
 });
 
-mongoose.model("users", userSchema);
+mongoose.model("Property", userSchema);
