@@ -4,7 +4,8 @@ const URL = "mongodb+srv://test:test@cluster0.awut9.mongodb.net/RoomRentSikar?re
 const bodyparser = require("body-parser");
 
 //Setting Up Models
-require('./models/User');
+require('./models/Property');
+
 
 
 const parameters = {
@@ -28,24 +29,27 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get("/", (req,res)=>{
-    res.sendFile(__dirname + "/index.html");
+    res.send("Hi from Homepage");
 });
 
 app.listen(port, ()=>{
     console.log("server is started on port "+port);
 });
 
-app.post("/adduser", (req,res)=>{
+app.post("/properties", (req,res)=>{
     //Fetch User Model
-    const User = mongoose.model('Property');
+    const Property = mongoose.model('Property');
 
-    var userdata = new User(req.body);
+    var propertydata = new Property(req.body);
 
-    userdata.save()
+    propertydata.save()
     .then(item =>{
         res.send("item saved to database");
     })
     .catch (err =>{
-        res.status(400).send("unable to save to database");
+        res.status(400).send("unable to save items to database");
     });
 });
+
+
+
