@@ -1,55 +1,80 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const URL = "mongodb+srv://test:test@cluster0.awut9.mongodb.net/RoomRentSikar?retryWrites=true&w=majority";
-const bodyparser = require("body-parser");
+const http = require('http');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var cors = require('cors');
 
-//Setting Up Models
-require('./models/Property');
+//Db Setup
+require('./db');
+require('./models');
 
+var port = 4000;
+var app = express();
 
+app.set('port', port);
+app.use(bodyParser.json({ limit: '100MB' }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-const parameters = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+//CORS
+app.use(cors());
+
+app.get("/api/", (req,res)=>{
+    res.send("API is up & running !!");
+});
+
+require('./routes')(app);
+
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
-mongoose.connect(URL,parameters)
-.then(()=>{
-    console.log("connected to database");
-})
-.catch ((err)=>{
-    console.log(`Error connecting to database \n${err}`);
-})
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    console.log('Listening on ' + bind);
+}
 
-const app =express();
-const port=4000;
-
-app.use(bodyparser.json());
-app.use(express.urlencoded({ extended: true })); 
-
-
-app.get("/", (req,res)=>{
-    res.send("Hi from Homepage");
-});
-
-app.listen(port, ()=>{
-    console.log("server is started on port "+port);
-});
-
-app.post("/properties", (req,res)=>{
-    //Fetch User Model
-    const Property = mongoose.model('Property');
-
-    var propertydata = new Property(req.body);
-
-    propertydata.save()
-    .then(item =>{
-        res.send("item saved to database");
-    })
-    .catch (err =>{
-        res.status(400).send("unable to save items to database");
-    });
-});
 
 
 

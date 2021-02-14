@@ -1,7 +1,7 @@
 const mongoose =require('mongoose');
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const propertySchema = new Schema({
     propertyname: String,
     type: String,
     address: String,
@@ -10,4 +10,4 @@ const userSchema = new Schema({
     price: Number
 });
 
-mongoose.model("Property", userSchema);
+mongoose.model("Property", propertySchema);
