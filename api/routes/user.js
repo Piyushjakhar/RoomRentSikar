@@ -1,8 +1,15 @@
 var express = require('express');
 var router = express.Router();
+var usersDB = require('../db/users');
 var genFunctions = require('../utility/genFunctions');
 
 router.post("/", (req, res) => {
+    var obj = req.body;
+    usersDB.insertProperty(obj).then(result => {
+        genFunctions.sendResponse(null, req, res, result);
+    }).catch(err => {
+        sendResponse(err, req, res, null);
+    });
 });
 
 router.get('/', function (req, res, next) {
