@@ -12,6 +12,7 @@ router.post("/", (req, res) => {
     });
 });
 
+
 router.get('/', function (req, res, next) {
     genFunctions.sendResponse(null, req, res, "Get API for User Collection");
 });

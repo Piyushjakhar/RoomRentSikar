@@ -1,12 +1,28 @@
 import React, { Component } from 'react'
-import { Navbar, Collapse, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, DropdownToggle, DropdownMenu, DropdownItem, NavbarText } from 'reactstrap';
+import { Navbar, Button, Collapse, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
 
-export default class NavBar extends Component {
+class NavBar extends Component {
     render() {
+
         return (
             <div>
-                <h3>Hello from navbar</h3>
+                <Navbar color="light" light expand="md">
+                    <NavbarBrand href="/">RoomRentSikar</NavbarBrand>
+                    <NavbarToggler />
+                    <Collapse navbar>
+                    <Nav className="ml-auto px-4 py-3" navbar>
+
+                        <NavItem>
+                        <Button className="btn btn-danger"  href="/login" >Login</Button>
+                        </NavItem>
+                        
+                    </Nav>
+ 
+                    </Collapse>
+                </Navbar>
             </div>
         )
     }
 }
+
+export default NavBar;
