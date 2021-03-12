@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const keys = require('./config/keys');
+
 
 //Db Setup
 require('./db');
@@ -11,6 +15,24 @@ require('./models');
 
 var port = 4000;
 var app = express();
+
+passport.use(new GoogleStrategy({
+    clientID: keys.googleClientID,
+    clientSecret: keys.googleClientSecret,
+    callbackURL: '/auth/google/callback'
+}, (accessToken, refreshToken, profile, done) => {
+
+    console.log('profile', profile);
+})
+);
+
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+})
+);
+
+app.get('/auth/google/callback', passport.authenticate('google'));
+
 
 app.set('port', port);
 app.use(bodyParser.json({ limit: '100MB' }));
